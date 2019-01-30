@@ -1,0 +1,29 @@
+{
+  "name": "@ewarren/serverless-routing",
+  "version": "1.0.0",
+  "description": "Provides an 'Express.js' like interface for AWS Lambda functions using the Serverless Framework",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elizabeth-Warren/serverless-routing.git"
+  },
+  "author": "Joe Kent <jkent@bluestatedigital.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Elizabeth-Warren/serverless-routing/issues"
+  },
+  "homepage": "https://github.com/Elizabeth-Warren/serverless-routing#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "path-to-regexp": "^3.0.0"
+  }
+}

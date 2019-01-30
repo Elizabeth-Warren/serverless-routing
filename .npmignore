@@ -1,0 +1,4 @@
+test/
+Dockerfile
+Makefile
+.dockerignore
