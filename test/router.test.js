@@ -36,6 +36,27 @@ describe('test router module', function() {
     }, {}, callback);
   });
 
+  it('should return an error for malformatted json', function(callback) {
+    const app = framework();
+    const onRequest = router(app);
+
+    app.post('/', ({ json }) => {
+      assert.isTrue(json.works);
+    });
+
+    onRequest({
+      httpMethod: 'post',
+      path: '/',
+      headers: { 'Content-Type': 'application/json' },
+      body: 'this wont parse',
+    }, {}, (err, response) => {
+      assert.equal(response.statusCode, 400);
+      assert.isString(JSON.parse(response.body).error.message);
+
+      callback();
+    });
+  });
+
   it('should not parse the json body of a post request when missing application/json headers', function(callback) {
     const app = framework();
     const onRequest = router(app);
