@@ -71,13 +71,27 @@ Route handlers can be asynchronous functions, and their execution is encapsulate
 
 `success(data: Object, code: Number)`: A helper function to generate a successful JSON response. Defaults to an empty object with status code 200.
 
-`failed(error: Error, code: Number)`: A helper function to generate a JSON response representing an error. Errors with an `_httpSafe` property will have their message dropped into the error response. Otherwise all error messages are replaced with a safe default. The default status code is 500.
+`failed(error: Error, code: Number)`: A helper function to generate a JSON response representing an error. Any error that is an instance of `HttpError` will have their message dropped into the error response. Otherwise all error messages are replaced with a safe default. The default status code is 500.
 
 `path`: The full path of the endpoint that was requested.
 
 `params`: An array of strings that represent any path parameters which were matched in the route. For example, if the route was `/test/:one/:two`, and the following path was requested, `/test/foo/bar`, the `params` array would contain `['foo', 'bar']`.
 
 `json`: If the request method is `PUT` or `POST` and contains a JSON content type header, the router will attempt to safely parse the request body. Defaults to `null` otherwise.
+
+**HttpError**
+
+Use this to deliver an error message to the response without leaking anything sensitive.
+
+```js
+const { HttpError } = require('@ewarren/serverless-routing');
+
+module.exports = (app) => {
+  app.get('/user/:id', ({ success }) => {
+    throw new HttpError('This message will be in the API response.');
+  });
+};
+```
 
 ## Local Development
 
@@ -86,3 +100,7 @@ To run tests locally, ensure you have [Docker](https://docker.com) installed.
 ```sh
 $ make tests
 ```
+
+## Publishing new versions
+
+(Coming soon) This repo is outfitted with Github Actions that automatically publish the package if tests pass and the version number has been bumped.
