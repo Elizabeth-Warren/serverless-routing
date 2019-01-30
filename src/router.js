@@ -3,12 +3,12 @@ const HttpError = require('./HttpError');
 function router(app) {
   async function onRequest(event, context, callback) {
     const success = (body = {}, statusCode = 200) => ({
-      statusCode,
+      statusCode: statusCode || 200,
       body: JSON.stringify(body),
     });
 
     const failed = (error = new HttpError('Server encountered an error.'), statusCode = 500) => ({
-      statusCode,
+      statusCode: statusCode || 500,
       body: JSON.stringify({ error: { message: `${error._httpSafe ? error.message : 'Server encountered an error.'}` } }),
     });
 

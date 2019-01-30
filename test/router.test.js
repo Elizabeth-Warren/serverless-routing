@@ -76,10 +76,12 @@ describe('test router module', function() {
 
       assert.equal(success().statusCode, 200);
       assert.equal(success({}, 201).statusCode, 201);
+      assert.equal(success({}, null).statusCode, 200);
       assert.equal(success({ test: true }).body, '{test:true}');
 
       assert.equal(failed().statusCode, 500);
       assert.equal(failed(new Error(), 400).statusCode, 400);
+      assert.equal(failed(new Error(), null).statusCode, 500);
       assert.notEqual(JSON.parse(failed(new Error('test')).body).error.message, 'test');
 
       const httpSafeError = new Error('test');
