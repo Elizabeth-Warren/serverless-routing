@@ -10,6 +10,10 @@ describe('HttpError should have correct properties', function() {
     assert.equal(new HttpError('test').message, 'test');
   });
 
+  it('should accept a custom status code', function() {
+    assert.equal(new HttpError('test', 201).codeHint, 201);
+  });
+
   it('should be throwable', function() {
     assert.throws(() => {
       throw new HttpError();

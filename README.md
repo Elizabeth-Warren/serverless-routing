@@ -93,6 +93,8 @@ module.exports = (app) => {
 };
 ```
 
+In addition to a `message` you can also pass in a numeric `codeHint` to the constructor to inform your route handler response code.
+
 ## Local Development
 
 To run tests locally, ensure you have [Docker](https://docker.com) installed.
