@@ -52,6 +52,7 @@ function router(app) {
 
       return callback(null, response);
     } catch (error) {
+      console.error(error);
       return callback(null, failed(error));
     }
   }
