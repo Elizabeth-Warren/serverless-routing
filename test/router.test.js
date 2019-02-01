@@ -29,7 +29,7 @@ describe('test router module', function() {
     });
 
     onRequest({
-      httpMethod: 'post',
+      httpMethod: 'POST',
       path: '/api',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ works: true }),

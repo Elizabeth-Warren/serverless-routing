@@ -43,7 +43,7 @@ function router(app) {
 
     const hasJsonContentType = lowercaseHeaders['content-type'] === 'application/json';
 
-    if (hasJsonContentType && body && ['post', 'put'].includes(method)) {
+    if (hasJsonContentType && body && ['post', 'put'].includes(method.toLowerCase())) {
       try {
         json = JSON.parse(body);
       } catch(error) {
