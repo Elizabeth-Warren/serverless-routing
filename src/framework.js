@@ -13,12 +13,14 @@ function app(options = {}) {
   }
 
   function method(type) {
-    if (! this.routes[type]) {
-      this.routes[type] = [];
+    const formattedType = type.toLowerCase();
+
+    if (! this.routes[formattedType]) {
+      this.routes[formattedType] = [];
     }
 
     function push(route, handler) {
-      this.routes[type].push([
+      this.routes[formattedType].push([
         pathToRegexp(computePath(route)),
         handler,
       ]);
@@ -28,11 +30,13 @@ function app(options = {}) {
   }
 
   function match(method, path) {
-    if (! this.routes[method]) {
+    const formattedMethod = method.toLowerCase();
+
+    if (! this.routes[formattedMethod]) {
       return null;
     }
 
-    for (const route of this.routes[method]) {
+    for (const route of this.routes[formattedMethod]) {
       const hits = route[0].exec(path);
 
       if (hits) {

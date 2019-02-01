@@ -54,6 +54,14 @@ describe('test framework module', function() {
     assert.isNull(app.match('fake', '/'));
   });
 
+  it('should accept methods regardless of case', function() {
+    const app = framework({ basePath: '/api' });
+
+    app.get('/', 'get /');
+
+    assert.deepEqual(app.match('GET', '/api'), [['/api'], 'get /']);
+  });
+
   it('should match parameters in the route', function() {
     const app = framework();
 
