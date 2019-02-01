@@ -1,7 +1,16 @@
 const pathToRegexp = require('path-to-regexp');
 
-function app() {
+function app(options = {}) {
+  const { basePath = '/api' } = options;
+  const hasBasePath = basePath && !! basePath.length;
+
   this.routes = {};
+
+  function computePath(input) {
+    const isTrailingSlash = input === '/';
+
+    return hasBasePath ? `${basePath}${isTrailingSlash ? '' : input}` : input;
+  }
 
   function method(type) {
     if (! this.routes[type]) {
@@ -10,7 +19,7 @@ function app() {
 
     function push(route, handler) {
       this.routes[type].push([
-        pathToRegexp(route),
+        pathToRegexp(computePath(route)),
         handler,
       ]);
     }

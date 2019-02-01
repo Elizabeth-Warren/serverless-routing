@@ -11,8 +11,33 @@ describe('test framework module', function() {
     assert.isFunction(framework().match);
   });
 
-  it('should accept routes and match them later based on method', function() {
-    const app = framework();
+  it('should accept routes and match them later based on method with a base prefix', function() {
+    const app = framework({ basePath: '/api' });
+
+    app.get('/', 'get /');
+    app.get('/test', 'get /test');
+
+    app.post('/', 'post /');
+    app.post('/test', 'post /test');
+
+    assert.deepEqual(app.match('get', '/api'), [['/api'], 'get /']);
+    assert.deepEqual(app.match('get', '/api/'), [['/api/'], 'get /']);
+
+    assert.deepEqual(app.match('get', '/api/test'), [['/api/test'], 'get /test']);
+    assert.deepEqual(app.match('get', '/api/test/'), [['/api/test/'], 'get /test']);
+
+    assert.deepEqual(app.match('post', '/api'), [['/api'], 'post /']);
+    assert.deepEqual(app.match('post', '/api/'), [['/api/'], 'post /']);
+
+    assert.deepEqual(app.match('post', '/api/test'), [['/api/test'], 'post /test']);
+    assert.deepEqual(app.match('post', '/api/test/'), [['/api/test/'], 'post /test']);
+
+    assert.isNull(app.match('get', '/fake'));
+    assert.isNull(app.match('fake', '/'));
+  });
+
+  it('should accept routes and match them later based on method without a base prefix', function() {
+    const app = framework({ basePath: null });
 
     app.get('/', 'get /');
     app.get('/test', 'get /test');
@@ -33,9 +58,9 @@ describe('test framework module', function() {
     const app = framework();
 
     app.get('/foo/:bar/:baz', () => {});
-    const [[path, bar, baz], handler] = app.match('get', '/foo/1/2');
+    const [[path, bar, baz], handler] = app.match('get', '/api/foo/1/2');
 
-    assert.equal(path, '/foo/1/2');
+    assert.equal(path, '/api/foo/1/2');
     assert.equal(bar, '1');
     assert.equal(baz, '2');
   });

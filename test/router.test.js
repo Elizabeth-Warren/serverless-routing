@@ -30,7 +30,7 @@ describe('test router module', function() {
 
     onRequest({
       httpMethod: 'post',
-      path: '/',
+      path: '/api',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ works: true }),
     }, {}, callback);
@@ -46,7 +46,7 @@ describe('test router module', function() {
 
     onRequest({
       httpMethod: 'post',
-      path: '/',
+      path: '/api',
       headers: { 'Content-Type': 'application/json' },
       body: 'this wont parse',
     }, {}, (err, response) => {
@@ -67,7 +67,7 @@ describe('test router module', function() {
 
     onRequest({
       httpMethod: 'post',
-      path: '/',
+      path: '/api',
       body: JSON.stringify({ works: true }),
     }, {}, callback);
   });
@@ -83,7 +83,7 @@ describe('test router module', function() {
 
     onRequest({
       httpMethod: 'get',
-      path: '/foo/bar',
+      path: '/api/foo/bar',
     }, {}, callback);
   });
 
@@ -98,7 +98,7 @@ describe('test router module', function() {
       assert.equal(success().statusCode, 200);
       assert.equal(success({}, 201).statusCode, 201);
       assert.equal(success({}, null).statusCode, 200);
-      assert.equal(success({ test: true }).body, '{test:true}');
+      assert.equal(success({ test: true }).body, '{"test":true}');
 
       assert.equal(failed().statusCode, 500);
       assert.equal(failed(new Error(), 400).statusCode, 400);
@@ -112,7 +112,7 @@ describe('test router module', function() {
 
     onRequest({
       httpMethod: 'get',
-      path: '/',
+      path: '/api',
     }, {}, callback);
   });
 
@@ -124,7 +124,7 @@ describe('test router module', function() {
       return success({ test: true });
     });
 
-    onRequest({ httpMethod: 'get', path: '/' }, {}, (err, response) => {
+    onRequest({ httpMethod: 'get', path: '/api' }, {}, (err, response) => {
       assert.isTrue(JSON.parse(response.body).test);
 
       callback();
@@ -144,7 +144,7 @@ describe('test router module', function() {
       return success({ test: true });
     });
 
-    onRequest({ httpMethod: 'get', path: '/' }, {}, (err, response) => {
+    onRequest({ httpMethod: 'get', path: '/api' }, {}, (err, response) => {
       assert.isTrue(JSON.parse(response.body).test);
 
       callback();
@@ -159,7 +159,7 @@ describe('test router module', function() {
       success({ test: true });
     });
 
-    onRequest({ httpMethod: 'get', path: '/' }, {}, (err, response) => {
+    onRequest({ httpMethod: 'get', path: '/api' }, {}, (err, response) => {
       assert.equal(response.statusCode, 500);
 
       callback();
@@ -174,7 +174,7 @@ describe('test router module', function() {
       throw new Error('[FIRE DRILL] This error is intentionally being thrown for testing purposes.')
     });
 
-    onRequest({ httpMethod: 'get', path: '/' }, {}, (err, response) => {
+    onRequest({ httpMethod: 'get', path: '/api' }, {}, (err, response) => {
       assert.equal(response.statusCode, 500);
 
       callback();
