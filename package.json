@@ -1,6 +1,6 @@
 {
   "name": "@ewarren/serverless-routing",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "Provides an 'Express.js' like interface for AWS Lambda functions using the Serverless Framework",
   "main": "src/index.js",
   "directories": {
