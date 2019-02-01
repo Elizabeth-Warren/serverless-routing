@@ -5,11 +5,19 @@ function router(app) {
     const success = (body = {}, statusCode = 200) => ({
       statusCode: statusCode || 200,
       body: JSON.stringify(body),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
     });
 
     const failed = (error = new HttpError('Server encountered an error.'), statusCode = 500) => ({
       statusCode: statusCode || 500,
       body: JSON.stringify({ error: { message: `${error._httpSafe ? error.message : 'Server encountered an error.'}` } }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
     });
 
     const { path, httpMethod: method } = event;
