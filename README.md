@@ -55,6 +55,12 @@ module.exports = (app) => {
 
 ## API Reference
 
+**framework(options)**
+
+When constructing a new application you can pass in options to override the default router configuration.
+
+`options.basePath`: The path prefix which prepends all API routes in this service (_not the API Gateway stage name_). Defaults to `/api`.
+
 **app.{get|put|post|delete}('/*', callback)**
 
 Create an endpoint for the given endpoint and path. Paths can include custom parameters, eg: `app.get('/user/:id', ...)`.
