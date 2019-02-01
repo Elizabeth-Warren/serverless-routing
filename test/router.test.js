@@ -36,6 +36,22 @@ describe('test router module', function() {
     }, {}, callback);
   });
 
+  it('should parse the json body of a post request with lowercase application/json headers', function(callback) {
+    const app = framework();
+    const onRequest = router(app);
+
+    app.post('/', ({ json }) => {
+      assert.isTrue(json.works);
+    });
+
+    onRequest({
+      httpMethod: 'post',
+      path: '/api',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ works: true }),
+    }, {}, callback);
+  });
+
   it('should return an error for malformatted json', function(callback) {
     const app = framework();
     const onRequest = router(app);

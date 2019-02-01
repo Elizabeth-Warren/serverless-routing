@@ -35,7 +35,13 @@ function router(app) {
     const { body = null, headers = {} } = event;
     let json = null;
 
-    const hasJsonContentType = headers['Content-Type'] === 'application/json';
+    const lowercaseHeaders = Object.keys(headers)
+      .reduce((acc, key) => ({
+        ...acc,
+        [key.toLowerCase()]: headers[key].toLowerCase(),
+      }), {});
+
+    const hasJsonContentType = lowercaseHeaders['content-type'] === 'application/json';
 
     if (hasJsonContentType && body && ['post', 'put'].includes(method)) {
       try {
