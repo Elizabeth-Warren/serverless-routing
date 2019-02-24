@@ -1,6 +1,6 @@
 # serverless-routing
 
-Provides an 'Express.js' like interface for AWS Lambda functions using the Serverless Framework.
+Provides a simple routing interface for AWS Lambda functions using the Serverless Framework.
 
 ## Getting Started
 
