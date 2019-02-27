@@ -1,10 +1,18 @@
 const HttpError = require('./HttpError');
 
+function transformBody(body, type) {
+  if (type === 'json') {
+    return JSON.stringify(body);
+  }
+
+  return body;
+}
+
 function router(app) {
   async function onRequest(event, context, callback) {
-    const success = (body = {}, statusCode = 200) => ({
+    const success = (body = {}, statusCode = 200, type = 'json') => ({
       statusCode: statusCode || 200,
-      body: JSON.stringify(body),
+      body: transformBody(body, type),
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,

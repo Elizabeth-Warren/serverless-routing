@@ -75,7 +75,7 @@ Route handlers can be asynchronous functions, and their execution is encapsulate
 
 `context`: The original AWS Lambda context object. [Read more](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html).
 
-`success(data: Object, code: Number)`: A helper function to generate a successful JSON response. Defaults to an empty object with status code 200.
+`success(data: Object, statusCode: Number = 200, type: String = 'json')`: A helper function to generate a successful http response. Defaults to an empty json object with status code 200.
 
 `failed(error: Error, code: Number)`: A helper function to generate a JSON response representing an error. Any error that is an instance of `HttpError` will have their message dropped into the error response. Otherwise all error messages are replaced with a safe default. The default status code is 500.
 
