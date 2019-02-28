@@ -118,6 +118,9 @@ describe('test router module', function() {
       assert.equal(success({ test: true }, 200, 'json').body, '{"test":true}');
       assert.equal(success('<xml></xml>', 200, 'xml').body, '<xml></xml>');
 
+      assert.equal(success({ test: true }).headers['Content-Type'], 'application/json');
+      assert.equal(success('<xml></xml>', 200, 'xml').headers['Content-Type'], 'application/xml');
+
       assert.equal(failed().statusCode, 500);
       assert.equal(failed(new Error(), 400).statusCode, 400);
       assert.equal(failed(new Error(), null).statusCode, 500);

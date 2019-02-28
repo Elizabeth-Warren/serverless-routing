@@ -8,6 +8,18 @@ function transformBody(body, type) {
   return body;
 }
 
+function transformContentType(type) {
+  if (type === 'json') {
+    return `application/json`;
+  }
+
+  if (type === 'xml') {
+    return `application/xml`;
+  }
+
+  return '';
+}
+
 function router(app) {
   async function onRequest(event, context, callback) {
     const success = (body = {}, statusCode = 200, type = 'json') => ({
@@ -16,6 +28,7 @@ function router(app) {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
+        'Content-Type': transformContentType(type),
       },
     });
 
