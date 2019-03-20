@@ -76,7 +76,7 @@ function router(app) {
       const [path, ...params] = hits;
 
       const response = await routeHandler({
-        event, context,
+        event, context, callback,
         success, failed,
         path, params, json,
       });
