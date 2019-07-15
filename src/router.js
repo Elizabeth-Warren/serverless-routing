@@ -22,13 +22,22 @@ function transformContentType(type) {
 
 function router(app) {
   async function onRequest(event, context, callback) {
-    const { path, httpMethod: method } = event;
+    const {
+      path,
+      httpMethod: method,
+      requestContext: {
+        identity: {
+          sourceIp,
+          userAgent,
+        },
+      },
+    } = event;
 
     const match = app.match(method, path);
     const requestStart = Date.now();
 
     function log(statusCode) {
-      console.log(`method=${method} path=${path} status=${statusCode} duration=${Date.now() - requestStart}ms`);
+      console.log(`method=${method} path=${path} status=${statusCode} duration=${Date.now() - requestStart}ms ip=${sourceIp} agent=${userAgent}`);
     }
 
     const success = (body = {}, statusCode = 200, type = 'json') => {
