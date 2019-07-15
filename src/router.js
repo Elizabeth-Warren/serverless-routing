@@ -22,27 +22,50 @@ function transformContentType(type) {
 
 function router(app) {
   async function onRequest(event, context, callback) {
-    const success = (body = {}, statusCode = 200, type = 'json') => ({
-      statusCode: statusCode || 200,
-      body: transformBody(body, type),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-        'Content-Type': transformContentType(type),
+    const {
+      path,
+      httpMethod: method,
+      requestContext: {
+        identity: {
+          sourceIp,
+          userAgent,
+        },
       },
-    });
+    } = event;
 
-    const failed = (error = new HttpError('Server encountered an error.'), statusCode = 500) => ({
-      statusCode: statusCode || 500,
-      body: JSON.stringify({ error: { message: `${error._httpSafe ? error.message : 'Server encountered an error.'}` } }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-    });
-
-    const { path, httpMethod: method } = event;
     const match = app.match(method, path);
+    const requestStart = Date.now();
+
+    function log(statusCode) {
+      console.log(`method=${method} path=${path} status=${statusCode} duration=${Date.now() - requestStart}ms ip=${sourceIp} agent=${userAgent}`);
+    }
+
+    const success = (body = {}, statusCode = 200, type = 'json') => {
+      log(statusCode);
+
+      return ({
+        statusCode: statusCode || 200,
+        body: transformBody(body, type),
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': transformContentType(type),
+        },
+      });
+    };
+
+    const failed = (error = new HttpError('Server encountered an error.'), statusCode = 500) => {
+      log(statusCode);
+
+      return ({
+        statusCode: statusCode || 500,
+        body: JSON.stringify({ error: { message: `${error._httpSafe ? error.message : 'Server encountered an error.'}` } }),
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
+      });
+    };
 
     if (! match) {
       const error = new Error('This resource does not exist.');

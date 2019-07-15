@@ -2,6 +2,20 @@ const { assert } = require('chai');
 const framework = require('../src/framework');
 const router = require('../src/router');
 
+const requestContext = {
+  identity: {
+    sourceIp: '0.0.0.0',
+    userAgent: 'test-framework',
+  },
+};
+
+function makeMockRequest(params) {
+  return ({
+    ...params,
+    requestContext,
+  });
+}
+
 describe('test router module', function() {
   it('should return a function to handle routing', function() {
     const app = framework();
@@ -12,7 +26,7 @@ describe('test router module', function() {
     const app = framework();
     const onRequest = router(app);
 
-    onRequest({ httpMethod: 'get', path: '/' }, {}, (err, response) => {
+    onRequest(makeMockRequest({ httpMethod: 'get', path: '/' }), {}, (err, response) => {
       assert.equal(response.statusCode, 404);
       assert.isString(JSON.parse(response.body).error.message);
 
@@ -28,12 +42,12 @@ describe('test router module', function() {
       assert.isTrue(json.works);
     });
 
-    onRequest({
+    onRequest(makeMockRequest({
       httpMethod: 'POST',
       path: '/api',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ works: true }),
-    }, {}, callback);
+    }), {}, callback);
   });
 
   it('should parse the json body of a post request with lowercase application/json headers', function(callback) {
@@ -44,12 +58,12 @@ describe('test router module', function() {
       assert.isTrue(json.works);
     });
 
-    onRequest({
+    onRequest(makeMockRequest({
       httpMethod: 'post',
       path: '/api',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ works: true }),
-    }, {}, callback);
+    }), {}, callback);
   });
 
   it('should return an error for malformatted json', function(callback) {
@@ -60,12 +74,12 @@ describe('test router module', function() {
       assert.isTrue(json.works);
     });
 
-    onRequest({
+    onRequest(makeMockRequest({
       httpMethod: 'post',
       path: '/api',
       headers: { 'Content-Type': 'application/json' },
       body: 'this wont parse',
-    }, {}, (err, response) => {
+    }), {}, (err, response) => {
       assert.equal(response.statusCode, 400);
       assert.isString(JSON.parse(response.body).error.message);
 
@@ -81,11 +95,11 @@ describe('test router module', function() {
       assert.isNull(json);
     });
 
-    onRequest({
+    onRequest(makeMockRequest({
       httpMethod: 'post',
       path: '/api',
       body: JSON.stringify({ works: true }),
-    }, {}, callback);
+    }), {}, callback);
   });
 
   it('should inject request parameters', function(callback) {
@@ -97,10 +111,10 @@ describe('test router module', function() {
       assert.equal(params[1], 'bar');
     });
 
-    onRequest({
+    onRequest(makeMockRequest({
       httpMethod: 'get',
       path: '/api/foo/bar',
-    }, {}, callback);
+    }), {}, callback);
   });
 
   it('should inject response helper functions', function(callback) {
@@ -131,10 +145,10 @@ describe('test router module', function() {
       assert.equal(JSON.parse(failed(httpSafeError).body).error.message, 'test');
     });
 
-    onRequest({
+    onRequest(makeMockRequest({
       httpMethod: 'get',
       path: '/api',
-    }, {}, callback);
+    }), {}, callback);
   });
 
   it('should return the route handler response', function(callback) {
@@ -145,7 +159,7 @@ describe('test router module', function() {
       return success({ test: true });
     });
 
-    onRequest({ httpMethod: 'get', path: '/api' }, {}, (err, response) => {
+    onRequest(makeMockRequest({ httpMethod: 'get', path: '/api' }), {}, (err, response) => {
       assert.isTrue(JSON.parse(response.body).test);
 
       callback();
@@ -165,7 +179,7 @@ describe('test router module', function() {
       return success({ test: true });
     });
 
-    onRequest({ httpMethod: 'get', path: '/api' }, {}, (err, response) => {
+    onRequest(makeMockRequest({ httpMethod: 'get', path: '/api' }), {}, (err, response) => {
       assert.isTrue(JSON.parse(response.body).test);
 
       callback();
@@ -180,7 +194,7 @@ describe('test router module', function() {
       success({ test: true });
     });
 
-    onRequest({ httpMethod: 'get', path: '/api' }, {}, (err, response) => {
+    onRequest(makeMockRequest({ httpMethod: 'get', path: '/api' }), {}, (err, response) => {
       assert.equal(response.statusCode, 500);
 
       callback();
@@ -195,7 +209,7 @@ describe('test router module', function() {
       throw new Error('[FIRE DRILL] This error is intentionally being thrown for testing purposes.')
     });
 
-    onRequest({ httpMethod: 'get', path: '/api' }, {}, (err, response) => {
+    onRequest(makeMockRequest({ httpMethod: 'get', path: '/api' }), {}, (err, response) => {
       assert.equal(response.statusCode, 500);
 
       callback();
