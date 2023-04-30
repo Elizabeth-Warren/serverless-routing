@@ -21,7 +21,7 @@
   "homepage": "https://github.com/Elizabeth-Warren/serverless-routing#readme",
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^5.2.0"
+    "mocha": "^10.2.0"
   },
   "dependencies": {
     "path-to-regexp": "^3.0.0"
